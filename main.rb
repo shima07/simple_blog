@@ -1,0 +1,128 @@
+require 'sinatra'
+require 'sinatra/reloader'
+require 'active_record'
+
+ActiveRecord::Base.establish_connection(
+  "adapter" => "sqlite3",
+  "database" => "./blog.db"
+)
+
+after do
+  ActiveRecord::Base.connection.close
+end
+
+class Article < ActiveRecord::Base
+end
+
+helpers do
+  include Rack::Utils
+  alias_method :h, :escape_html
+end
+
+get '/' do
+  @title = "ホーム"
+  erb :index
+end
+
+# 検索
+get '/search' do
+  @title = "検索"
+  result = Article.all
+
+  if result.empty?
+    print "not found\n"
+  else
+    
+  end
+  @articles = result
+
+  erb :search
+end
+
+post '/search?:key' do
+  @title = "検索"
+  @key = params[:name]
+
+  result = Article.where("title like ?", "%" + params[:name] + "%").limit(30)
+
+  if result.empty?
+    print "not found\n"
+  else
+    
+  end
+  @articles = result
+
+  erb :search
+end
+
+# 追加
+get '/admin/new' do
+  @title = "登録"
+  erb :new
+end
+
+post '/admin/new' do
+  Article.create(
+    title: params[:title],
+    body: params[:body],
+    tag: params[:tag],
+    thumbnail: params[:thumbnail],
+    update_member: params[:update_member],
+  )
+  redirect '/admin/new'
+end
+
+# 更新
+get '/admin/edit' do
+  @title = "更新"
+  erb :edit
+end
+
+post '/admin/edit' do
+  article = Article.find_by_id(params[:id])
+
+  if article.nil?
+    print "not found\n"
+    redirect '/admin/edit'
+  else
+    article.update_attributes(
+      title: params[:title],
+      body: params[:body],
+      tag: params[:tag],
+      thumbnail: params[:thumbnail],
+      update_member: params[:update_member],
+      )
+    redirect '/admin/edit'
+  end
+end
+
+# 削除
+post '/admin/delete' do
+  article = Article.find_by_id(params[:id])
+
+  if article.nil?
+    print "not found\n"
+    redirect '/'
+  else
+    article.delete
+    redirect '/admin/edit'
+  end
+end
+
+# 記事ページ
+get %r{/article/([0-9]*)} do |i|
+  result = Article.find_by_id(i)
+
+  if result.nil?
+    print "not found\n"
+    redirect '/'
+  else
+    @title = result.title
+    @article = result
+    erb :page
+  end
+end
+
+not_found do
+  redirect '/'
+end

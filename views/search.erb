@@ -1,0 +1,26 @@
+<ul>
+  <div class="container bs-docs-container">
+    <div class="row">
+      <div class="" role="main">
+        <h3>検索結果</h3>
+        <p>「<%= @key %>」で検索</p>
+        <table id="result" class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>タイトル</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @articles.each do |article| %>
+            <tr>
+              <th scope="row"><%= article.id %></th>
+              <td><%= h article.title %></td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</ul>
