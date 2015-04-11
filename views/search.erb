@@ -14,7 +14,7 @@
           <tbody>
             <% @articles.each do |article| %>
             <tr>
-              <th scope="row"><a href="http://localhost:4567/article/<%= article.id %>"><%= article.id %></a></th>
+              <th scope="row"><a href="article/<%= article.id %>"><%= article.id %></a></th>
               <td><%= h article.title %></td>
             </tr>
             <% end %>
