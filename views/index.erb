@@ -3,17 +3,17 @@
     <div class="" role="main">
       <div class="row">
         <% @articles.each do |article| %>
-            <div class="col-sm-6 col-md-4">
-              <a href="/article/<%= article.id %>">
-                <div class="thumbnail">
-                  <img src="..." alt="...">
-                  <div class="caption">
-                    <h3><%= h article.title %></h3>
-                    <p><%= h article.body %></p>
-                  </div>
-                </div>
-              </a>
+          <div class="col-sm-6 col-md-4">
+            <div class="thumbnail">
+              <img src="..." alt="...">
+              <div class="caption">
+                <a href="/article/<%= article.id %>">
+                <h3><%= h article.title %></h3>
+                </a>
+                <p><%= h article.body %></p>
+              </div>
             </div>
+          </div>
         <% end %>
       </div>
     </div>
