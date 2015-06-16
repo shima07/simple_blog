@@ -1,0 +1,22 @@
+<ul>
+  <div class="container bs-docs-container">
+    <div class="" role="main">
+      <div class="row">
+        <% @articles.each do |article| %>
+            <div class="col-sm-6 col-md-4">
+              <a href="/article/<%= article.id %>">
+                <div class="thumbnail">
+                  <img src="..." alt="...">
+                  <div class="caption">
+                    <h3><%= h article.title %></h3>
+                    <p><%= h article.body %></p>
+                  </div>
+                </div>
+              </a>
+            </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</ul>
+

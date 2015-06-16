@@ -21,6 +21,16 @@ end
 
 get '/' do
   @title = "ホーム"
+
+  result = Article.all.limit(3).order("id DESC")
+
+  if result.empty?
+    print "not found\n"
+  else
+    
+  end
+  @articles = result
+
   erb :index
 end
 
