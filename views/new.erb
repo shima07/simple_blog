@@ -1,13 +1,29 @@
 <ul>
   <h3>記事を追加</h3>
   <form method="post" action="/admin/new">
-    <input type="text" name="title" value="test">
+    <div class="form-group">
+      <label>記事タイトル</label>
+      <input class="form-control" type="text" name="title" value="" placeholder="Title">
+    </div>
+   
     <!-- wysiwyg -->
-    <textarea name="body">testtest</textarea>
-    <input type="text" name="tag" value="test">
-    <input type="value" name="thumbnail" value="test">
-    <input type="text" name="update_member" value="test">
-    <input type="submit" value="追加">
+    <div class="form-group">
+      <label>本文</label>
+      <textarea name="body"></textarea>
+    </div>
+    <div class="form-group">
+      <label>タグ</label>
+      <input class="form-control" type="text" name="tag" value="" placeholder="Tag">
+    </div>
+    <div class="form-group">
+      <label>サムネイル</label>
+      <input class="form-control" type="value" name="thumbnail" value="" placeholder="Thumbnail">
+    </div>
+    <div class="form-group">
+      <label>投稿者</label>
+      <input class="form-control" type="text" name="update_member" value="" placeholder="Name">
+    </div>
+    <button type="submit" class="btn btn-default">追加</button>
   </form>
 </ul>
 
