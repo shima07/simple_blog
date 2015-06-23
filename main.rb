@@ -1,6 +1,8 @@
 require 'sinatra'
 require 'sinatra/reloader'
 require 'active_record'
+require 'sinatra/base'
+require 'rack-flash'
 
 ActiveRecord::Base.establish_connection(
   "adapter" => "sqlite3",
@@ -9,6 +11,11 @@ ActiveRecord::Base.establish_connection(
 
 after do
   ActiveRecord::Base.connection.close
+end
+
+configure do
+  enable :sessions
+  use Rack::Flash
 end
 
 class Article < ActiveRecord::Base
@@ -22,7 +29,7 @@ end
 get '/' do
   @title = "ホーム"
 
-  result = Article.all.limit(3).order("id DESC")
+  result = Article.all.limit(6).order("id DESC")
 
   if result.empty?
     print "not found\n"
@@ -85,6 +92,15 @@ end
 # 更新
 get '/admin/edit' do
   @title = "更新"
+  result = Article.all
+
+  if result.empty?
+    print "not found\n"
+  else
+    
+  end
+  @articles = result
+
   erb :edit
 end
 
@@ -111,11 +127,10 @@ post '/admin/delete' do
   article = Article.find_by_id(params[:id])
 
   if article.nil?
-    print "not found\n"
-    redirect '/'
+    flash[:alert] = "削除に失敗しました"
   else
     article.delete
-    redirect '/admin/edit'
+    flash[:alert] = "削除しました"
   end
 end
 

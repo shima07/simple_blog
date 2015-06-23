@@ -1,31 +1,47 @@
-<ul>
-  <h3>記事を更新</h3>
-  <form method="post" action="/admin/edit">
-    <input type="text" name="id" value="1">
-    <input type="text" name="title" value="asdfasfds">
-    <input type="text" name="body" value="asdfasdf">
-    <input type="text" name="tag" value="asdfasdf">
-    <input type="value" name="thumbnail" value="test">
-    <input type="text" name="update_member" value="test">
-    <input type="submit" value="更新">
-  </form>
-</ul>
+<p><%= flash[:alert] %></p>
 
 <ul>
-  <h3>記事を削除</h3>
-  <input id="deleteIndex" type="text" name="id" value="1">
-  <span class="deleteBtn"><button>削除</button></span>
-  </form>
+  <h3>記事を編集</h3>
+
+  <ul>
+    <div class="container bs-docs-container">
+      <div class="row">
+        <div class="" role="main">
+          <h3>記事一覧</h3>
+          <table id="result" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>タイトル</th>
+                <th>更新日時</th>
+                <th>削除</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @articles.each do |article| %>
+              <tr>
+                <th scope="row"><a href="/article/<%= article.id %>"><%= article.id %></a></th>
+                <td><%= h article.title %></td>
+                <td><%= h article.updated_at %></td>
+                <td><span class="delete-btn" value="<%= article.id %>"><button>削除</button></span></td>
+              </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </ul>
 </ul>
 
 <script>
-  $('.deleteBtn').click(function() {
-      var el = $('#deleteIndex');
-      if (confirm('削除しますか？')) {
-          $.post('/admin/delete', {
-              id: el.val()
-          }, function() {
-          });
-      }
+  $('.delete-btn').click(function() {
+    if (confirm('削除しますか？')) {
+      $.post('/admin/delete', {
+        id: $(this).attr("value")
+      }, function() {
+        location.reload();
+      });
+    }
   })
 </script>
