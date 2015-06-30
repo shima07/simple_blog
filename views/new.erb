@@ -1,15 +1,17 @@
 <ul>
   <h3>記事を追加</h3>
-  <form method="post" action="/admin/new" enctype="multipart/form-data">
+  <form id="article-form" method="post" action="/admin/new" enctype="multipart/form-data">
     <div class="form-group">
       <label>記事タイトル</label>
-      <input class="form-control" type="text" name="title" value="" placeholder="Title">
+      <input id="title" class="form-control" type="text" name="title" value="" placeholder="Title">
     </div>
 
-    <!-- wysiwyg -->
     <div class="form-group">
       <label>本文</label>
-      <textarea name="body"></textarea>
+      <textarea id="editor" class="form-control"></textarea>
+      <textarea id="body" name="body"></textarea>
+      <div id="pre-body" name=body></div>
+      <!-- <textarea id="body" name="body"></textarea> -->
     </div>
     <div class="form-group">
       <label>タグ</label>
@@ -23,10 +25,57 @@
       <label>投稿者</label>
       <input class="form-control" type="text" name="update_member" value="" placeholder="Name">
     </div>
-    <button type="submit" class="btn btn-default">追加</button>
+    <button type="submit" class="validate btn btn-default">追加</button>
   </form>
 </ul>
 
 <!-- CDN hosted by Cachefly -->
-<script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
-<script>tinymce.init({selector:'textarea'});</script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+  $(function() {
+    marked.setOptions({
+      langPrefix: ''
+    });
+    $('#editor').keyup(function() {
+      var src = $(this).val();
+      var html = marked(src);
+      $('#body').html(html);
+      $('#pre-body').html(html);
+      $('pre code').each(function(i, block) {
+          hljs.highlightBlock(block);
+      });
+    });
+  });
+
+  $(".validate").click(function() {
+    if ($("#title").val() == "" || $("#body").val() == "") {
+      if($("#title").val() == ""){
+        if(!($("#title").parent().find('.title-error-msg').length)){
+          $("#title").parent().append('<p class="title-error-msg">タイトルは必須項目です</p>');
+          $("#title").parent().addClass('has-error');
+        }
+      }else{
+        if($("#title").parent().find('.title-error-msg').length){
+          $(".title-error-msg").remove();
+          $("#title").parent().removeClass('has-error');
+        }
+      }
+      if($("#body").val() == ""){
+        //すでにあるかどうかを確認する
+        if(!($("#body").parent().find('.body-error-msg').length)){
+          $("#body").parent().append('<p class="body-error-msg">本文は必須項目です</p>');
+          $("#body").parent().addClass('has-error');
+        }
+      }else{
+        if($("#body").parent().find('.body-error-msg').length){
+          $(".body-error-msg").remove();
+          $("#body").parent().removeClass('has-error');
+        }
+      }
+      return false;
+    }
+  });
+});
+</script>
