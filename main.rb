@@ -86,6 +86,7 @@ post '/admin/new' do
     thumbnail: params[:thumbnail],
     update_member: params[:update_member],
   )
+  #POST内でリダイレクトはできない
   redirect '/admin/new'
 end
 
@@ -118,7 +119,8 @@ post '/admin/edit' do
       thumbnail: params[:thumbnail],
       update_member: params[:update_member],
       )
-    redirect '/admin/edit'
+    #POST内でリダイレクトはできない
+    # redirect '/admin/edit'
   end
 end
 
