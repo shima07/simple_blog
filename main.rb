@@ -5,6 +5,7 @@ require 'active_record'
 require 'sinatra/base'
 require 'rack-flash'
 require 'securerandom'
+require 'sanitize'
 
 ActiveRecord::Base.establish_connection(
   "adapter" => "sqlite3",
