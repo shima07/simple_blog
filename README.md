@@ -8,6 +8,7 @@
 * sinatra (1.4.6, 1.4.5, 1.4.4)  
 * sinatra-contrib (1.4.2)  
 * rack-flash3 (1.0.5)
+* sanitize (4.0.0)
 
 ####起動  
 
