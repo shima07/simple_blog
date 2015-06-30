@@ -14,7 +14,7 @@
                 <th>ID</th>
                 <th>タイトル</th>
                 <th>更新日時</th>
-                <th>削除</th>
+                <th>コマンド</th>
               </tr>
             </thead>
             <tbody>
@@ -23,7 +23,7 @@
                 <th scope="row"><a href="/article/<%= article.id %>"><%= article.id %></a></th>
                 <td><%= h article.title %></td>
                 <td><%= h article.updated_at %></td>
-                <td><span class="delete-btn" value="<%= article.id %>"><button>削除</button></span></td>
+                <td><span class="delete-btn glyphicon glyphicon-trash" value="<%= article.id %>" aria-hidden="true"></span></td>
               </tr>
               <% end %>
             </tbody>
