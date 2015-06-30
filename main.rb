@@ -1,8 +1,10 @@
+require 'sqlite3'
 require 'sinatra'
 require 'sinatra/reloader'
 require 'active_record'
 require 'sinatra/base'
 require 'rack-flash'
+require 'securerandom'
 
 ActiveRecord::Base.establish_connection(
   "adapter" => "sqlite3",
@@ -34,7 +36,7 @@ get '/' do
   if result.empty?
     print "not found\n"
   else
-    
+
   end
   @articles = result
 
@@ -49,7 +51,7 @@ get '/search' do
   if result.empty?
     print "not found\n"
   else
-    
+
   end
   @articles = result
 
@@ -65,7 +67,7 @@ post '/search?:key' do
   if result.empty?
     print "not found\n"
   else
-    
+
   end
   @articles = result
 
@@ -79,13 +81,33 @@ get '/admin/new' do
 end
 
 post '/admin/new' do
+  if params["thumbnail"]
+    ext = ""
+    if params["thumbnail"][:type].include? "jpeg"
+      ext = "jpg"
+    elsif params["thumbnail"][:type].include? "png"
+      ext = "png"
+    else
+      return "投稿できる画像はjpgかpngのみです"
+    end
+
+    file_name = SecureRandom.hex + "." + ext
+
+    File.open("./public/uploads/thumbnail/" + file_name, "wb") do |f|
+      f.write params["thumbnail"][:tempfile].read
+    end
+  else
+  end
+
   Article.create(
     title: params[:title],
     body: params[:body],
     tag: params[:tag],
-    thumbnail: params[:thumbnail],
+    thumbnail: file_name,
     update_member: params[:update_member],
   )
+  print "test"
+  print file_name
   #POST内でリダイレクトはできない
   redirect '/admin/new'
 end
@@ -98,7 +120,7 @@ get '/admin/edit' do
   if result.empty?
     print "not found\n"
   else
-    
+
   end
   @articles = result
 
