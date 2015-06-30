@@ -97,6 +97,7 @@ post '/admin/new' do
       f.write params["thumbnail"][:tempfile].read
     end
   else
+    file_name = "noimage.png"
   end
 
   Article.create(
