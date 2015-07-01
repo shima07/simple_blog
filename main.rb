@@ -19,6 +19,8 @@ end
 configure do
   enable :sessions
   use Rack::Flash
+  Time.zone = "Tokyo"
+  ActiveRecord::Base.default_timezone = :local
 end
 
 class Article < ActiveRecord::Base
