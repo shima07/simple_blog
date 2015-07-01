@@ -7,7 +7,7 @@
         <% @articles.each do |article| %>
           <div class="col-sm-6 col-md-4">
             <div class="thumbnail">
-              <img src="..." alt="...">
+              <img src="/uploads/thumbnail/<%= h article.thumbnail %>" alt="<%= h article.thumbnail %>">
               <div class="caption">
                 <a href="/article/<%= article.id %>">
                 <h3><%= h article.title %></h3>
