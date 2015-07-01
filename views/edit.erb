@@ -33,13 +33,32 @@
 </ul>
 
 <script>
+$(document).ready(function() {
   $('.delete-btn').click(function() {
-    if (confirm('削除しますか？')) {
-      $.post('/admin/delete', {
-        id: $(this).attr("value")
-      }, function() {
-        location.reload();
-      });
-    }
-  })
+    aid = $(this).attr("value");
+    noty({
+    	text: '削除しますか？',
+      timeout : false,
+      closable: false,
+      type: 'confirm',
+      layout: 'center',
+      closeOnSelfClick: false,
+    	buttons: [
+    		{addClass: 'btn btn-primary', text: 'Ok', onClick: function($noty) {
+            $.post('/admin/delete', {
+              id: aid
+            }, function() {
+              location.reload();
+            });
+    				$noty.close();
+    			}
+    		},
+    		{addClass: 'btn btn-danger', text: 'Cancel', onClick: function($noty) {
+    				$noty.close();
+    			}
+    		}
+    	]
+    });
+  });
+});
 </script>

@@ -148,8 +148,8 @@ end
 # 削除
 post '/admin/delete' do
   article = Article.find_by_id(params[:id])
-
   if article.nil?
+    print "not found"
   else
     article.delete
   end
