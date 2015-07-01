@@ -2,8 +2,6 @@ require 'sqlite3'
 require 'sinatra'
 require 'sinatra/reloader'
 require 'active_record'
-require 'sinatra/base'
-require 'rack-flash'
 require 'securerandom'
 require 'sanitize'
 
@@ -17,8 +15,6 @@ after do
 end
 
 configure do
-  enable :sessions
-  use Rack::Flash
   Time.zone = "Tokyo"
   ActiveRecord::Base.default_timezone = :local
 end
@@ -27,7 +23,6 @@ class Article < ActiveRecord::Base
 end
 
 helpers do
-  include Rack::Utils
   alias_method :h, :escape_html
 end
 
@@ -155,10 +150,8 @@ post '/admin/delete' do
   article = Article.find_by_id(params[:id])
 
   if article.nil?
-    flash[:alert] = "削除に失敗しました"
   else
     article.delete
-    flash[:alert] = "削除しました"
   end
 end
 
