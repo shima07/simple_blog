@@ -77,5 +77,38 @@ $(document).ready(function() {
       return false;
     }
   });
+
+  $('#editor').bind('drop', function(e){
+    e.preventDefault();
+    var files = e.originalEvent.dataTransfer.files;
+    uploadFiles(files);
+  }).bind('dragenter', function(){
+    return false;
+  }).bind('dragover', function(){
+    $('#editor').css({"border":"3px #ccffcc dotted" , "background-color":"#eeffee"});
+    return false;
+  }).bind('dragleave', function(){
+    $('#editor').css({"border":"" , "background-color":""});
+    return false;
+  });
+
+  function uploadFiles(files) {
+    var fd = new FormData();
+    var filesLength = files.length;
+    for (var i = 0; i < filesLength; i++) {
+      fd.append("files", files[i]);
+    }
+
+    $.ajax({
+      url: '/admin/send',
+      type: 'POST',
+      data: fd,
+      processData: false,
+      contentType: false,
+      success: function(data) {
+      }
+    });
+  };
+
 });
 </script>

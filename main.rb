@@ -78,6 +78,26 @@ get '/admin/new' do
   erb :new
 end
 
+post '/admin/send' do
+  if params["files"]
+    ext = ""
+    if params["files"][:type].include? "jpeg"
+      ext = "jpg"
+    elsif params["files"][:type].include? "png"
+      ext = "png"
+    else
+      return "投稿できる画像はjpgかpngのみです"
+    end
+
+    file_name = SecureRandom.hex + "." + ext
+
+    File.open("./public/uploads/img/" + file_name, "wb") do |f|
+      f.write params["files"][:tempfile].read
+    end
+  else
+  end
+end
+
 post '/admin/new' do
   if params["thumbnail"]
     ext = ""
