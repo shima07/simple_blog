@@ -79,6 +79,7 @@ $(document).ready(function() {
   });
 
   $('#editor').bind('drop', function(e){
+    $('#editor').css({"border":"" , "background-color":""});
     e.preventDefault();
     var files = e.originalEvent.dataTransfer.files;
     uploadFiles(files);
@@ -100,13 +101,12 @@ $(document).ready(function() {
     }
 
     $.ajax({
-      url: '/admin/send',
+      url: '/admin/upload',
       type: 'POST',
       data: fd,
       processData: false,
       contentType: false,
-      success: function(data) {
-      }
+    }).done(function(data, status, xhr) {
     });
   };
 

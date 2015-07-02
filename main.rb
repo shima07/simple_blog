@@ -78,7 +78,7 @@ get '/admin/new' do
   erb :new
 end
 
-post '/admin/send' do
+post '/admin/upload' do
   if params["files"]
     ext = ""
     if params["files"][:type].include? "jpeg"
