@@ -107,8 +107,25 @@ $(document).ready(function() {
       processData: false,
       contentType: false,
     }).done(function(data, status, xhr) {
+      insertAtCaret('#editor', '![](/uploads/img/)');
+      return false;
     });
   };
 
+  function insertAtCaret(target, str) {
+    var obj = $(target);
+    obj.focus();
+    if(navigator.userAgent.match(/MSIE/)) {
+      var r = document.selection.createRange();
+      r.text = str;
+      r.select();
+    } else {
+      var s = obj.val();
+      var p = obj.get(0).selectionStart;
+      var np = p + str.length;
+      obj.val(s.substr(0, p) + str + s.substr(p));
+      obj.get(0).setSelectionRange(np, np);
+    }
+  };
 });
 </script>

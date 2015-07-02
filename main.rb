@@ -96,6 +96,7 @@ post '/admin/upload' do
     end
   else
   end
+  redirect '/admin/new'
 end
 
 post '/admin/new' do
