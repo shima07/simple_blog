@@ -79,11 +79,11 @@ get '/admin/new' do
 end
 
 post '/admin/upload' do
-  if params["files"]
+  if params["files[0]"]
     ext = ""
-    if params["files"][:type].include? "jpeg"
+    if params["files[0]"][:type].include? "jpeg"
       ext = "jpg"
-    elsif params["files"][:type].include? "png"
+    elsif params["files[0]"][:type].include? "png"
       ext = "png"
     else
       return "投稿できる画像はjpgかpngのみです"
@@ -92,7 +92,7 @@ post '/admin/upload' do
     file_name = SecureRandom.hex + "." + ext
 
     File.open("./public/uploads/img/" + file_name, "wb") do |f|
-      f.write params["files"][:tempfile].read
+      f.write params["files[0]"][:tempfile].read
     end
   else
   end

@@ -97,7 +97,7 @@ $(document).ready(function() {
     var fd = new FormData();
     var filesLength = files.length;
     for (var i = 0; i < filesLength; i++) {
-      fd.append("files", files[i]);
+      fd.append("files[" + i + "]", files[i]);
     }
 
     $.ajax({
