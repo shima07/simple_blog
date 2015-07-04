@@ -2,7 +2,7 @@
   <div class="container bs-docs-container">
     <div class="" role="main">
       <h3>検索結果</h3>
-      <p>「<%= h @q %>」で検索</p>
+      <p>「<%= h @q %>」で検索 / <%= h @articles.length %>件</p>
       <% if @articles.length == 0 %>
         <% if @q == "" %>
           <p>値を設定してください</p>
@@ -15,6 +15,26 @@
       <% else %>
       <% end %>
       <div class="row">
+        <nav>
+          <ul class="pagination">
+            <li>
+              <a href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li>
+              <a href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        
         <% if @articles.length == 0 %>
         <% else %>
           <% @articles.each do |article| %>
