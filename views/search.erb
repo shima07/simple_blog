@@ -2,7 +2,7 @@
   <div class="container bs-docs-container">
     <div class="" role="main">
       <h3>検索結果</h3>
-      <p>「<%= @q %>」で検索</p>
+      <p>「<%= h @q %> 」で検索</p>
       <div class="row">
         <% @articles.each do |article| %>
           <div class="col-sm-6 col-md-4">
