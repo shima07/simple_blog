@@ -50,6 +50,7 @@ get '/search' do
   @page = params[:page]
   @sort = params[:sort]
   @error = ""
+  @articles = ""
 
   tq = params[:q]
   ts = params[:sort]
