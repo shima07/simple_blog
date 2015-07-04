@@ -3,7 +3,10 @@
     <div class="row">
       <div class="" role="main">
         <h1><%= h @article.title %></h1>
-        <p>更新:<%= h @article.update_member %> / 更新日時:<%= h @time %> / タグ:<%= h @article.tag %></p>
+        <p>更新 : <%= h @article.update_member %> /
+          更新日時 : <%= h @time %> /
+          タグ : <% @tags.each do |tag| %><a href="/search?q=+tag%3A<%= h tag %>"><%= h tag %></a> <% end %>
+        </p>
         <!--p><%= h @article.thumbnail %></p-->
         <hr>
         <p><%= @article.body %></p>
