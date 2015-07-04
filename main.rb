@@ -72,29 +72,31 @@ post '/search?:key' do
   erb :search
 end
 
-# 追加
+# 投稿
 get '/admin/new' do
-  @title = "登録"
+  @title = "投稿"
   erb :new
 end
 
 post '/admin/upload' do
-  if params["files[0]"]
+  print "upload\n"
+  if params["files"]
     ext = ""
-    if params["files[0]"][:type].include? "jpeg"
+    if params["files"][:type].include? "jpeg"
       ext = "jpg"
-    elsif params["files[0]"][:type].include? "png"
+    elsif params["files"][:type].include? "png"
       ext = "png"
     else
       return "投稿できる画像はjpgかpngのみです"
     end
 
-    file_name = SecureRandom.hex + "." + ext
+    file_name = params["files"][:filename] + "." + ext
 
     File.open("./public/uploads/img/" + file_name, "wb") do |f|
-      f.write params["files[0]"][:tempfile].read
+      f.write params["files"][:tempfile].read
     end
   else
+    print "error not found\n"
   end
   redirect '/admin/new'
 end

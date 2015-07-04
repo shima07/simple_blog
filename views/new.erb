@@ -82,7 +82,11 @@ $(document).ready(function() {
     $('#editor').css({"border":"" , "background-color":""});
     e.preventDefault();
     var files = e.originalEvent.dataTransfer.files;
-    uploadFiles(files);
+    if (files.length == 1){
+      uploadFiles(files);
+    }else{
+      console.log("fileは一度に一つまで");
+    }
   }).bind('dragenter', function(){
     return false;
   }).bind('dragover', function(){
@@ -95,10 +99,18 @@ $(document).ready(function() {
 
   function uploadFiles(files) {
     var fd = new FormData();
-    var filesLength = files.length;
-    for (var i = 0; i < filesLength; i++) {
-      fd.append("files[" + i + "]", files[i]);
+    var tuid = genUUID();
+    var filename = "";
+
+    if(files[0]["type"] == "image/jpeg"){
+      filename = tuid + ".jpg"
+    }else if(files[0]["type"] == "image/png"){
+      filename = tuid + ".png"
+    }else{
+      console.log("アップロードできるのはjpgかpngのみです");
+      return false;
     }
+    fd.append("files", files[0], tuid);
 
     $.ajax({
       url: '/admin/upload',
@@ -107,7 +119,8 @@ $(document).ready(function() {
       processData: false,
       contentType: false,
     }).done(function(data, status, xhr) {
-      insertAtCaret('#editor', '![](/uploads/img/)');
+      insertAtCaret('#editor', '![](/uploads/img/' + filename + ')');
+      $('#editor').trigger(jQuery.Event('keyup', ""));
       return false;
     });
   };
@@ -127,5 +140,16 @@ $(document).ready(function() {
       obj.get(0).setSelectionRange(np, np);
     }
   };
+
+  function genUUID(){
+    var uuid = (function () {
+      var S4 = function () {
+        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+      }
+      return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+    })();
+  return uuid;
+};
+
 });
 </script>
