@@ -37,8 +37,8 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <li>
-              <form class="navbar-form" method="post" action="/search">
-                <input type="text" name="name" value="">
+              <form class="navbar-form" method="get" action="/search">
+                <input type="text" name="q" value="<%= @q %>">
                 <button type="submit" class="btn btn-info">検索</button>
               </form>
             </li>

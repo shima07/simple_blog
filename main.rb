@@ -45,23 +45,9 @@ end
 # 検索
 get '/search' do
   @title = "検索"
-  result = Article.all
+  @q = params[:q]
 
-  if result.empty?
-    print "not found\n"
-  else
-
-  end
-  @articles = result
-
-  erb :search
-end
-
-post '/search?:key' do
-  @title = "検索"
-  @key = params[:name]
-
-  result = Article.where("title like ?", "%" + params[:name] + "%").limit(30)
+  result = Article.where("title like ?", "%" + params[:q] + "%").limit(30)
 
   if result.empty?
     print "not found\n"
