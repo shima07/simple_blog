@@ -4,7 +4,8 @@ require 'sinatra/reloader'
 require 'active_record'
 require 'securerandom'
 require 'sanitize'
-require "date"
+require 'date'
+require 'cgi'
 
 ActiveRecord::Base.establish_connection(
   "adapter" => "sqlite3",
@@ -46,15 +47,92 @@ end
 get '/search' do
   @title = "検索"
   @q = params[:q]
+  @page = params[:page]
+  @sort = params[:sort]
+  @error = ""
 
-  result = Article.where("title like ?", "%" + params[:q] + "%").limit(30)
+  tq = params[:q]
+  ts = params[:sort]
 
-  if result.empty?
-    print "not found\n"
+  if tq.empty?
+    @error = "queryが設定されていません"
   else
+    query = ""
+    result = ""
 
+    tqa = tq.split(" ")
+    for item in tqa do
+      if item.include?("title:")
+        if item =~ /title:(.+)$/
+          if query.empty?
+          else
+            query += "and "
+          end
+          query += "title LIKE '%" + $1 + "%' "
+        else
+          @error = "パラメータが設定されていません"
+        end
+      elsif item.include?("tag:")
+        if item =~ /tag:(.+)$/
+          if query.empty?
+          else
+            query += "and "
+          end
+          query += "tag LIKE '%" + $1 + "%' "
+        else
+          @error = "パラメータが設定されていません"
+        end
+      elsif item.include?("body:")
+        if item =~ /body:(.+)$/
+          if query.empty?
+          else
+            query += "and "
+          end
+          query += "body LIKE '%" + $1 + "%' "
+        else
+          @error = "パラメータが設定されていません"
+        end
+      elsif item.include?("member:")
+        if item =~ /member:(.+)$/
+          if query.empty?
+          else
+            query += "and "
+          end
+          query += "update_member LIKE '%" + $1 + "%' "
+        else
+          @error = "パラメータが設定されていません"
+        end
+      elsif item.include?("created:")
+      elsif item.include?("updated:")
+      else
+        #通常の文字列検索は本文検索とする
+        if query.empty?
+        else
+          query += "and "
+        end
+        query += "body LIKE '%" + item + "%' "
+      end
+    end
+
+    if query.empty?
+      @error = "パラメータが設定されていません"
+    else
+      # sort
+      #   投稿順
+      #   新着順
+      if params[:sort]=="old"
+      else
+        query += "order by created_at "
+      end
+      result = ActiveRecord::Base.connection.execute("select * from articles WHERE " + query + "limit 30")
+    end
+
+    if result.empty?
+      print "not found\n"
+    else
+    end
+    @articles = result
   end
-  @articles = result
 
   erb :search
 end

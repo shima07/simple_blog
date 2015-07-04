@@ -2,20 +2,34 @@
   <div class="container bs-docs-container">
     <div class="" role="main">
       <h3>検索結果</h3>
-      <p>「<%= h @q %> 」で検索</p>
+      <p>「<%= h @q %>」で検索</p>
+      <% if @articles.length == 0 %>
+        <% if @q == "" %>
+          <p>値を設定してください</p>
+        <% else %>
+          <p><%= @error %></p>
+          <% if @articles.length == 0 && @error == "" %>
+            <p>ヒットしませんでした</p>
+          <% end %>
+        <% end %>
+      <% else %>
+      <% end %>
       <div class="row">
-        <% @articles.each do |article| %>
-          <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
-              <img src="/uploads/thumbnail/<%= h article.thumbnail %>" alt="<%= h article.thumbnail %>">
-              <div class="caption">
-                <a href="/article/<%= article.id %>">
-                <h3><%= h article.title %></h3>
-                </a>
-                <p><%= h Sanitize.clean(article.body) %></p>
+        <% if @articles.length == 0 %>
+        <% else %>
+          <% @articles.each do |article| %>
+            <div class="col-sm-6 col-md-4">
+              <div class="thumbnail">
+                <img src="/uploads/thumbnail/<%= h article["thumbnail"] %>" alt="<%= h article["thumbnail"] %>">
+                <div class="caption">
+                  <a href="/article/<%= article["id"] %>">
+                  <h3><%= h article["title"] %></h3>
+                  </a>
+                  <p><%= h Sanitize.clean(article["body"]) %></p>
+                </div>
               </div>
             </div>
-          </div>
+          <% end %>
         <% end %>
       </div>
     </div>
