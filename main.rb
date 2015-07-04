@@ -4,6 +4,7 @@ require 'sinatra/reloader'
 require 'active_record'
 require 'securerandom'
 require 'sanitize'
+require "date"
 
 ActiveRecord::Base.establish_connection(
   "adapter" => "sqlite3",
@@ -185,8 +186,8 @@ get %r{/article/([0-9]*)} do |i|
     print "not found\n"
     redirect '/'
   else
-    @title = result.title
     @article = result
+    @time = DateTime.parse(result.updated_at).strftime("%Y年%m月%d日%H:%M")
     erb :page
   end
 end
