@@ -47,6 +47,7 @@ end
 get '/search' do
   @title = "検索"
   @q = params[:q]
+  @qhref = "q=" + params[:q]
   @page = 1
   @sort = params[:sort]
   @error = ""
@@ -128,6 +129,8 @@ get '/search' do
       #   投稿順
       #   新着順
       if params[:sort]=="old"
+        query += "order by created_at ASC "
+        @qhref += "&sort=" + ts
       else
         query += "order by created_at DESC "
       end

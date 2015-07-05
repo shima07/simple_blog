@@ -28,7 +28,7 @@
                 <% if num == @page %>
                   <li><a><%= num %></a></li>
                 <% else %>
-                  <li><a href="/search?q=<%= @q %>&page=<%= num %>"><%= num %></a></li>
+                  <li><a href="/search?<%= @qhref %>&page=<%= num %>"><%= num %></a></li>
                 <% end %>
               <% end %>
               <li>
