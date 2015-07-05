@@ -47,6 +47,7 @@ end
 get '/search' do
   @title = "検索"
   @q = params[:q]
+  @qn = "q=" + params[:q]
   @qhref = "q=" + params[:q]
   @page = 1
   @sort = params[:sort]

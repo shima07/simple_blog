@@ -3,6 +3,21 @@
     <div class="" role="main">
       <h3>検索結果</h3>
       <p>「<%= h @q %>」で検索 / <%= h @resultCount %>件</p>
+      <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          <span class="glyphicon glyphicon-sort"></span>
+          <% if @sort == "old" %>
+           投稿順
+          <% else %>
+           新着順
+          <% end %>
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+          <li><a href="/search?<%= @qn %>&page=<%= @page %>">新着順</a></li>
+          <li><a href="/search?<%= @qn %>&sort=old&page=<%= @page %>">投稿順</a></li>
+        </ul>
+      </div>
       <% if @resultCount == 0 %>
         <% if @q == "" %>
           <p>値を設定してください</p>
