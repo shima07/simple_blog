@@ -129,7 +129,7 @@ get '/search' do
       #   新着順
       if params[:sort]=="old"
       else
-        query += "order by created_at "
+        query += "order by created_at DESC "
       end
       result = ActiveRecord::Base.connection.execute("select * from articles WHERE " + query + "limit 30")
     end
