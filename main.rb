@@ -258,6 +258,7 @@ get %r{/article/([0-9]*)} do |i|
     redirect '/'
   else
     @article = result
+    @title = result.title
     @time = DateTime.parse(result.updated_at).strftime("%Y年%m月%d日%H:%M")
     @tags = result.tag.split(",")
     erb :page
