@@ -2,20 +2,20 @@
   <div class="container bs-docs-container">
     <div class="" role="main">
       <h3>検索結果</h3>
-      <p>「<%= h @q %>」で検索 / <%= h @articles.length %>件</p>
-      <% if @articles.length == 0 %>
+      <p>「<%= h @q %>」で検索 / <%= h @resultCount %>件</p>
+      <% if @resultCount == 0 %>
         <% if @q == "" %>
           <p>値を設定してください</p>
         <% else %>
           <p><%= @error %></p>
-          <% if @articles.length == 0 && @error == "" %>
+          <% if @resultCount == 0 && @error == "" %>
             <p>ヒットしませんでした</p>
           <% end %>
         <% end %>
       <% else %>
       <% end %>
       <div class="row">
-        <% if @articles.length == 0 %>
+        <% if @resultCount == 0 %>
         <% else %>
           <nav>
             <ul class="pagination">
@@ -24,7 +24,7 @@
                   <span aria-hidden="true">&laquo;</span>
                 </a>
               </li>
-              <% for num in 1..((@articles.length/6.to_f).ceil) do %>
+              <% for num in 1..((@resultCount/6.to_f).ceil) do %>
                 <% if num == @page %>
                   <li><a><%= num %></a></li>
                 <% else %>
@@ -38,20 +38,18 @@
               </li>
             </ul>
           </nav>
-          <% for i in (@page-1)*6..(@page*6)-1 do %>
-            <% if i < @articles.length %>
+          <% @articles.each do |article| %>
             <div class="col-sm-6 col-md-4">
               <div class="thumbnail">
-                <img src="/uploads/thumbnail/<%= h @articles[i]["thumbnail"] %>" alt="<%= h @articles[i]["thumbnail"] %>">
+                <img src="/uploads/thumbnail/<%= h article["thumbnail"] %>" alt="<%= h article["thumbnail"] %>">
                 <div class="caption">
-                  <a href="/article/<%= @articles[i]["id"] %>">
-                  <h3><%= h @articles[i]["title"] %></h3>
+                  <a href="/article/<%= article["id"] %>">
+                  <h3><%= h article["title"] %></h3>
                   </a>
-                  <p><%= h Sanitize.clean(@articles[i]["body"]) %></p>
+                  <p><%= h Sanitize.clean(article["body"]) %></p>
                 </div>
               </div>
             </div>
-            <% end %>
           <% end %>
         <% end %>
       </div>

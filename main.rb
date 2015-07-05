@@ -52,9 +52,12 @@ get '/search' do
   @sort = params[:sort]
   @error = ""
   @articles = ""
+  @resultCount = 0
 
-  tp = params[:page]
+  tp = params[:page].to_i
   if tp.nil?
+  elsif tp <= 0
+    @page = 1
   else
     @page = params[:page].to_i
   end
@@ -134,7 +137,19 @@ get '/search' do
       else
         query += "order by created_at DESC "
       end
-      result = ActiveRecord::Base.connection.execute("select * from articles WHERE " + query + "limit 30")
+
+      #件数取得
+      resultCount = ActiveRecord::Base.connection.execute("select * from articles WHERE " + query)
+      @resultCount = resultCount.length
+
+      # page
+      if tp.nil?
+        query += "limit 6"
+      else
+        query += "limit " + ((tp-1) * 6 - 1).to_s + ", 6"
+      end
+
+      result = ActiveRecord::Base.connection.execute("select * from articles WHERE " + query)
     end
 
     if result.empty?
