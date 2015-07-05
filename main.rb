@@ -47,10 +47,16 @@ end
 get '/search' do
   @title = "検索"
   @q = params[:q]
-  @page = params[:page]
+  @page = 1
   @sort = params[:sort]
   @error = ""
   @articles = ""
+
+  tp = params[:page]
+  if tp.nil?
+  else
+    @page = params[:page].to_i
+  end
 
   tq = params[:q]
   ts = params[:sort]

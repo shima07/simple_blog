@@ -15,40 +15,43 @@
       <% else %>
       <% end %>
       <div class="row">
-        <nav>
-          <ul class="pagination">
-            <li>
-              <a href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li>
-              <a href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
-        
         <% if @articles.length == 0 %>
         <% else %>
-          <% @articles.each do |article| %>
+          <nav>
+            <ul class="pagination">
+              <li>
+                <a href="#" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <% for num in 1..((@articles.length/6.to_f).ceil) do %>
+                <% if num == @page %>
+                  <li><a><%= num %></a></li>
+                <% else %>
+                  <li><a href="/search?q=<%= @q %>&page=<%= num %>"><%= num %></a></li>
+                <% end %>
+              <% end %>
+              <li>
+                <a href="#" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+          <% for i in (@page-1)*6..(@page*6)-1 do %>
+            <% if i < @articles.length %>
             <div class="col-sm-6 col-md-4">
               <div class="thumbnail">
-                <img src="/uploads/thumbnail/<%= h article["thumbnail"] %>" alt="<%= h article["thumbnail"] %>">
+                <img src="/uploads/thumbnail/<%= h @articles[i]["thumbnail"] %>" alt="<%= h @articles[i]["thumbnail"] %>">
                 <div class="caption">
-                  <a href="/article/<%= article["id"] %>">
-                  <h3><%= h article["title"] %></h3>
+                  <a href="/article/<%= @articles[i]["id"] %>">
+                  <h3><%= h @articles[i]["title"] %></h3>
                   </a>
-                  <p><%= h Sanitize.clean(article["body"]) %></p>
+                  <p><%= h Sanitize.clean(@articles[i]["body"]) %></p>
                 </div>
               </div>
             </div>
+            <% end %>
           <% end %>
         <% end %>
       </div>
