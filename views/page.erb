@@ -1,7 +1,8 @@
 <ul>
   <div class="container bs-docs-container">
     <div class="row">
-      <div class="" role="main">
+      <!--Main Content -->
+      <div class="col-xs-9" role="main">
         <h1><%= h @title %></h1>
         <p>更新 : <%= h @article.update_member %> /
           更新日時 : <%= h @time %> /
@@ -9,8 +10,137 @@
         </p>
         <!--p><%= h @article.thumbnail %></p-->
         <hr>
-        <p><%= @article.body %></p>
+        <div class="main-content">
+          <%= @article.body %>
+        </div>
       </div>
+      <!--Nav Bar -->
+      <nav class="col-xs-3 bs-docs-sidebar">
+        <ul id="sidebar" class="nav nav-stacked fixed">
+
+        </ul>
+      </nav>
     </div>
   </div>
 </ul>
+
+<script>
+$(document).ready(function() {
+  $('body').scrollspy({
+      target: '.bs-docs-sidebar',
+      offset: 40
+  });
+
+  // Stack (LIFO)
+  function Stack() {
+    this.__a = new Array();
+  }
+  Stack.prototype.push = function (o) {
+    this.__a.push(o);
+  }
+  Stack.prototype.pop = function () {
+    if (this.__a.length > 0) {
+      return this.__a.pop();
+    }
+    return null;
+  }
+  Stack.prototype.size = function () {
+    return this.__a.length;
+  }
+  Stack.prototype.toString = function () {
+    return '[' + this.__a.join(',') + ']';
+  }
+  Stack.prototype.getFirstOutData = function () {
+    if (this.__a.length > 0) {
+      return this.__a[this.__a.length-1];
+    }
+    return null;
+  }
+
+  // メニューを作る
+  var mainContents = $('.main-content').find('h1,h2,h3,h4,h5,h6');
+  console.log(mainContents);
+
+  var count = 0;
+  var tempNN = "";
+  s = new Stack();
+  headers = new Array("H1", "H2", "H3", "H4", "H5", "H6");
+  for (var i = 0; i < mainContents.length; i++) {
+    for (var n = 0; n < headers.length; n++) {
+      if(mainContents[i]["nodeName"] == headers[n]){
+        if (s.size() == 0){
+          s.push(headers[n]);
+          $('#sidebar').append('<li><a href=\"#' + mainContents[i]["textContent"] + '\">' + mainContents[i]["textContent"] + '</a></li>');
+        }else {
+
+
+        }
+      }
+    }
+  }
+
+  console.log(s.toString());
+});
+</script>
+
+<style media="screen">
+.fixed {
+  position: fixed;
+  right: 0;
+}
+
+/* sidebar */
+.bs-docs-sidebar {
+  padding-left: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* all links */
+.bs-docs-sidebar .nav>li>a {
+  color: #999;
+  border-left: 2px solid transparent;
+  padding: 4px 20px;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+/* nested links */
+.bs-docs-sidebar .nav .nav>li>a {
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-left: 30px;
+  font-size: 12px;
+}
+
+/* active & hover links */
+.bs-docs-sidebar .nav>.active>a,
+.bs-docs-sidebar .nav>li>a:hover,
+.bs-docs-sidebar .nav>li>a:focus {
+  color: #563d7c;
+  text-decoration: none;
+  background-color: transparent;
+  border-left-color: #563d7c;
+}
+/* all active links */
+.bs-docs-sidebar .nav>.active>a,
+.bs-docs-sidebar .nav>.active:hover>a,
+.bs-docs-sidebar .nav>.active:focus>a {
+  font-weight: 700;
+}
+/* nested active links */
+.bs-docs-sidebar .nav .nav>.active>a,
+.bs-docs-sidebar .nav .nav>.active:hover>a,
+.bs-docs-sidebar .nav .nav>.active:focus>a {
+  font-weight: 500;
+}
+
+/* hide inactive nested list */
+.bs-docs-sidebar .nav ul.nav {
+  /*display: none;*/
+}
+/* show active nested list */
+.bs-docs-sidebar .nav>.active>ul.nav {
+  display: block;
+}
+</style>
