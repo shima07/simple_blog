@@ -61,25 +61,23 @@ $(document).ready(function() {
   var mainContents = $('.main-content').find('h1,h2,h3,h4,h5,h6');
   console.log(mainContents);
 
-  var count = 0;
-  var tempNN = "";
-  s = new Stack();
+  heardsIndex = 0;
+  headerNum = 0;
   headers = new Array("H1", "H2", "H3", "H4", "H5", "H6");
   for (var i = 0; i < mainContents.length; i++) {
     for (var n = 0; n < headers.length; n++) {
       if(mainContents[i]["nodeName"] == headers[n]){
-        if (s.size() == 0){
-          s.push(headers[n]);
-          $('#sidebar').append('<li><a href=\"#' + mainContents[i]["textContent"] + '\">' + mainContents[i]["textContent"] + '</a></li>');
-        }else {
-
-
-        }
+        heardsIndex = n;
+        headerNum += 1;
+        break;
       }
+    }
+
+    if(mainContents[i]["nodeName"] == headers[heardsIndex]){
+      $('#sidebar').append('<li class=\""sidebar-h' + headerNum + '\"><a href=\"#' + mainContents[i]["textContent"] + '\">' + mainContents[i]["textContent"] + '</a></li>');
     }
   }
 
-  console.log(s.toString());
 });
 </script>
 
