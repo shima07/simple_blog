@@ -17,7 +17,6 @@
       <!--Nav Bar -->
       <nav class="col-xs-3 bs-docs-sidebar">
         <ul id="sidebar" class="nav nav-stacked fixed">
-
         </ul>
       </nav>
     </div>
@@ -26,11 +25,6 @@
 
 <script>
 $(document).ready(function() {
-  $('body').scrollspy({
-      target: '.bs-docs-sidebar',
-      offset: 40
-  });
-
   // Stack (LIFO)
   function Stack() {
     this.__a = new Array();
@@ -59,7 +53,6 @@ $(document).ready(function() {
 
   // メニューを作る
   var mainContents = $('.main-content').find('h1,h2,h3,h4,h5,h6');
-  console.log(mainContents);
 
   heardsIndex = 0;
   headerNum = 0;
@@ -74,9 +67,14 @@ $(document).ready(function() {
     }
 
     if(mainContents[i]["nodeName"] == headers[heardsIndex]){
-      $('#sidebar').append('<li class=\""sidebar-h' + headerNum + '\"><a href=\"#' + mainContents[i]["textContent"] + '\">' + mainContents[i]["textContent"] + '</a></li>');
+      $('#sidebar').append('<li class=\"sidebar-h' + headerNum + '\"><a href=\"#' + mainContents[i]["textContent"] + '\">' + mainContents[i]["textContent"] + '</a></li>');
     }
   }
+  $('body').scrollspy({
+      target: '.bs-docs-sidebar',
+      offset: 40
+  });
+
 
 });
 </script>
@@ -139,6 +137,6 @@ $(document).ready(function() {
 }
 /* show active nested list */
 .bs-docs-sidebar .nav>.active>ul.nav {
-  display: block;
+  /*display: block;*/
 }
 </style>
