@@ -16,8 +16,11 @@
   </div>
   <div class="form-group">
     <label>サムネイル</label>
-    <input class="form-control" type="file" name="thumbnail" value="<%= h @article["thumbnail"] if !@article.nil? %>" placeholder="Thumbnail">
+    <input class="form-control" type="file" name="thumbnail" id="thumbnail" value="<%= h @article["thumbnail"] if !@article.nil? %>" placeholder="Thumbnail">
   </div>
+  <% if !@article.nil? %>
+    <img id="temp-thumbnail" src="/uploads/thumbnail/<%= h @article["thumbnail"] %>" alt="/uploads/thumbnail/<%= h @article["thumbnail"] %>" />
+  <% end %>
   <div class="form-group">
     <label>投稿者</label>
     <input class="form-control" type="text" name="update_member" value="<%= h @article["update_member"] if !@article.nil?%>" placeholder="Name">

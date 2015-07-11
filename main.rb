@@ -250,6 +250,25 @@ end
 post '/admin/edit' do
   article = Article.find_by_id(params[:id])
 
+  if params["thumbnail"]
+    ext = ""
+    if params["thumbnail"][:type].include? "jpeg"
+      ext = "jpg"
+    elsif params["thumbnail"][:type].include? "png"
+      ext = "png"
+    else
+      return "投稿できる画像はjpgかpngのみです"
+    end
+
+    file_name = SecureRandom.hex + "." + ext
+
+    File.open("./public/uploads/thumbnail/" + file_name, "wb") do |f|
+      f.write params["thumbnail"][:tempfile].read
+    end
+  else
+    file_name = article.thumbnail
+  end
+
   if article.nil?
     print "not found\n"
     redirect '/admin/list'
@@ -259,7 +278,7 @@ post '/admin/edit' do
       mdbody: params[:editor],
       body: params[:body],
       tag: params[:tag],
-      thumbnail: params[:thumbnail],
+      thumbnail: file_name,
       update_member: params[:update_member],
       )
   end

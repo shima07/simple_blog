@@ -23,6 +23,26 @@ $(document).ready(function() {
     });
   });
 
+  var file = document.getElementById( 'thumbnail' );
+  file.onchange = function(){
+    var files = this.files;
+    for( var i = 0; i < files.length; i++ ){
+      var file = files[ i ];
+      var imageType = /^image\//;
+      if( file.type.match( imageType ) ){
+        var img = document.createElement( 'img' );
+        img.file = file;
+        document.body.appendChild( img );
+        var reader = new FileReader();
+        reader.onload = ( function( aImg ){
+                          return function( e ){ aImg.src = e.target.result;};
+                        } )( img );
+        reader.readAsDataURL( file );
+      }
+      $('#temp-thumbnail').css("display","none");
+    }
+  }
+
   $(".validate").click(function() {
     if ($("#title").val() == "" || $("#body").val() == "") {
       if($("#title").val() == ""){
