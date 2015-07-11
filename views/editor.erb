@@ -1,27 +1,27 @@
 <form id="article-form" method="post" action="/admin/edit" enctype="multipart/form-data">
   <div class="form-group">
     <label>記事タイトル</label>
-    <input id="title" class="form-control" type="text" name="title" value="<%= h @article["title"] %>" placeholder="Title">
+    <input id="title" class="form-control" type="text" name="title" value="<%= h @article["title"] if !@article.nil? %>" placeholder="Title">
   </div>
 
   <div class="form-group">
     <label>本文</label>
-    <textarea id="editor" class="form-control"><%= h @article["mdbody"] %></textarea>
+    <textarea id="editor" class="form-control"><%= h @article["mdbody"] if !@article.nil? %></textarea>
     <textarea id="body" name="body"></textarea>
     <div id="pre-body" name=body></div>
   </div>
   <div class="form-group">
     <label>タグ</label>
-    <input class="form-control" type="text" name="tag" value="<%= h @article["tag"] %>" placeholder="Tag">
+    <input class="form-control" type="text" name="tag" value="<%= h @article["tag"] if !@article.nil? %>" placeholder="Tag">
   </div>
   <div class="form-group">
     <label>サムネイル</label>
-    <input class="form-control" type="file" name="thumbnail" value="<%= h @article["thumbnail"] %>" placeholder="Thumbnail">
+    <input class="form-control" type="file" name="thumbnail" value="<%= h @article["thumbnail"] if !@article.nil? %>" placeholder="Thumbnail">
   </div>
   <div class="form-group">
     <label>投稿者</label>
-    <input class="form-control" type="text" name="update_member" value="<%= h @article["update_member"] %>" placeholder="Name">
+    <input class="form-control" type="text" name="update_member" value="<%= h @article["update_member"] if !@article.nil?%>" placeholder="Name">
   </div>
-  <input type="text" name="id" id="id" value="<%= @id %>" style="display:none;">
+  <input type="text" name="id" id="id" value="<%= @id if !@id.nil? %>" style="display:none;">
   <button type="submit" class="validate btn btn-default">投稿</button>
 </form>
