@@ -228,7 +228,7 @@ end
 # 更新
 get '/admin/edit' do
   @title = "更新"
-  result = Article.all
+  result = Article.all.order("id DESC")
 
   if result.empty?
     print "not found\n"
