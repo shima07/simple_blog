@@ -1,67 +1,129 @@
 <ul>
   <h3>記事を編集</h3>
-
-  <ul>
-    <div class="container bs-docs-container">
-      <div class="row">
-        <div class="" role="main">
-          <h3>記事一覧</h3>
-          <table id="result" class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>タイトル</th>
-                <th>更新日時</th>
-                <th>コマンド</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @articles.each do |article| %>
-              <tr>
-                <th scope="row"><a href="/article/<%= article.id %>"><%= article.id %></a></th>
-                <td><%= h article.title %></td>
-                <td><%= h DateTime.parse(article.updated_at).strftime("%Y年%m月%d日%H:%M") %></td>
-                <td>
-                  <span class="edit-btn glyphicon glyphicon-edit" value="<%= article.id %>" aria-hidden="true"></span>
-                  <span class="delete-btn glyphicon glyphicon-trash" value="<%= article.id %>" aria-hidden="true"></span>
-                </td>
-              </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </ul>
+  <%= erb :editor, collection: @article %>
 </ul>
 
-<script>
+<!-- CDN hosted by Cachefly -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+<script type="text/javascript">
 $(document).ready(function() {
-  $('.delete-btn').click(function() {
-    aid = $(this).attr("value");
-    noty({
-    	text: '削除しますか？',
-      timeout : false,
-      closable: false,
-      type: 'confirm',
-      layout: 'center',
-      closeOnSelfClick: false,
-    	buttons: [
-    		{addClass: 'btn btn-primary', text: 'Ok', onClick: function($noty) {
-            $.post('/admin/delete', {
-              id: aid
-            }, function() {
-              location.reload();
-            });
-    				$noty.close();
-    			}
-    		},
-    		{addClass: 'btn btn-danger', text: 'Cancel', onClick: function($noty) {
-    				$noty.close();
-    			}
-    		}
-    	]
+  $(function() {
+    marked.setOptions({
+      langPrefix: ''
+    });
+    $('#editor').keyup(function() {
+      var src = $(this).val();
+      var html = marked(src);
+      $('#body').html(html);
+      $('#pre-body').html(html);
+      $('pre code').each(function(i, block) {
+          hljs.highlightBlock(block);
+      });
     });
   });
+
+  $(".validate").click(function() {
+    if ($("#title").val() == "" || $("#body").val() == "") {
+      if($("#title").val() == ""){
+        if(!($("#title").parent().find('.title-error-msg').length)){
+          $("#title").parent().append('<p class="title-error-msg">タイトルは必須項目です</p>');
+          $("#title").parent().addClass('has-error');
+        }
+      }else{
+        if($("#title").parent().find('.title-error-msg').length){
+          $(".title-error-msg").remove();
+          $("#title").parent().removeClass('has-error');
+        }
+      }
+      if($("#body").val() == ""){
+        //すでにあるかどうかを確認する
+        if(!($("#body").parent().find('.body-error-msg').length)){
+          $("#body").parent().append('<p class="body-error-msg">本文は必須項目です</p>');
+          $("#body").parent().addClass('has-error');
+        }
+      }else{
+        if($("#body").parent().find('.body-error-msg').length){
+          $(".body-error-msg").remove();
+          $("#body").parent().removeClass('has-error');
+        }
+      }
+      return false;
+    }
+  });
+
+  $('#editor').bind('drop', function(e){
+    $('#editor').css({"border":"" , "background-color":""});
+    e.preventDefault();
+    var files = e.originalEvent.dataTransfer.files;
+    if (files.length == 1){
+      uploadFiles(files);
+    }else{
+      console.log("fileは一度に一つまで");
+    }
+  }).bind('dragenter', function(){
+    return false;
+  }).bind('dragover', function(){
+    $('#editor').css({"border":"3px #ccffcc dotted" , "background-color":"#eeffee"});
+    return false;
+  }).bind('dragleave', function(){
+    $('#editor').css({"border":"" , "background-color":""});
+    return false;
+  });
+
+  function uploadFiles(files) {
+    var fd = new FormData();
+    var tuid = genUUID();
+    var filename = "";
+
+    if(files[0]["type"] == "image/jpeg"){
+      filename = tuid + ".jpg"
+    }else if(files[0]["type"] == "image/png"){
+      filename = tuid + ".png"
+    }else{
+      console.log("アップロードできるのはjpgかpngのみです");
+      return false;
+    }
+    fd.append("files", files[0], tuid);
+
+    $.ajax({
+      url: '/admin/upload',
+      type: 'POST',
+      data: fd,
+      processData: false,
+      contentType: false,
+    }).done(function(data, status, xhr) {
+      insertAtCaret('#editor', '![](/uploads/img/' + filename + ')');
+      $('#editor').trigger(jQuery.Event('keyup', ""));
+      return false;
+    });
+  };
+
+  function insertAtCaret(target, str) {
+    var obj = $(target);
+    obj.focus();
+    if(navigator.userAgent.match(/MSIE/)) {
+      var r = document.selection.createRange();
+      r.text = str;
+      r.select();
+    } else {
+      var s = obj.val();
+      var p = obj.get(0).selectionStart;
+      var np = p + str.length;
+      obj.val(s.substr(0, p) + str + s.substr(p));
+      obj.get(0).setSelectionRange(np, np);
+    }
+  };
+
+  function genUUID(){
+    var uuid = (function () {
+      var S4 = function () {
+        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+      }
+      return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+    })();
+  return uuid;
+};
+
 });
 </script>

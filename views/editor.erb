@@ -1,4 +1,4 @@
-<form id="article-form" method="post" action="/admin/edit" enctype="multipart/form-data">
+<form id="article-form" method="post" action="<%= !@article.nil? ? "/admin/edit" : "/admin/new" %>" enctype="multipart/form-data">
   <div class="form-group">
     <label>記事タイトル</label>
     <input id="title" class="form-control" type="text" name="title" value="<%= h @article["title"] if !@article.nil? %>" placeholder="Title">
@@ -6,7 +6,7 @@
 
   <div class="form-group">
     <label>本文</label>
-    <textarea id="editor" class="form-control"><%= h @article["mdbody"] if !@article.nil? %></textarea>
+    <textarea id="editor" name="editor" class="form-control"><%= h @article["mdbody"] if !@article.nil? %></textarea>
     <textarea id="body" name="body"></textarea>
     <div id="pre-body" name=body></div>
   </div>

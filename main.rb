@@ -214,13 +214,12 @@ post '/admin/new' do
 
   Article.create(
     title: params[:title],
+    mdbody: params[:editor],
     body: params[:body],
     tag: params[:tag],
     thumbnail: file_name,
     update_member: params[:update_member],
   )
-  print "test"
-  print file_name
 
   redirect '/admin/new'
 end
@@ -237,6 +236,7 @@ get %r{/admin/edit/([0-9]*)} do |i|
     @title = "編集"
     @article = {
       "title" => result.title,
+      "mdbody" => result.mdbody,
       "body" => result.body,
       "tag" => result.tag,
       "thumbnail" => result.thumbnail,
@@ -256,6 +256,7 @@ post '/admin/edit' do
   else
     article.update_attributes(
       title: params[:title],
+      mdbody: params[:editor],
       body: params[:body],
       tag: params[:tag],
       thumbnail: params[:thumbnail],
