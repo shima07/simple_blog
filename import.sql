@@ -1,6 +1,7 @@
 create table articles (
   id integer primary key,
   title text,
+  mdbody text,
   body text,
   tag text,
   thumbnail text,
