@@ -226,18 +226,25 @@ post '/admin/new' do
 end
 
 # 更新
-get '/admin/edit' do
-  @title = "更新"
-  result = Article.all.order("id DESC")
+get %r{/admin/edit/([0-9]*)} do |i|
+  result = Article.find_by_id(i)
 
-  if result.empty?
+  if result.nil?
     print "not found\n"
+    redirect '/'
   else
+    @id = i
+    @title = "編集"
+    @article = {
+      "title" => result.title,
+      "body" => result.body,
+      "tag" => result.tag,
+      "thumbnail" => result.thumbnail,
+      "update_member" => result.update_member
+    }
 
+    erb :edit
   end
-  @articles = result
-
-  erb :edit
 end
 
 post '/admin/edit' do
@@ -245,7 +252,7 @@ post '/admin/edit' do
 
   if article.nil?
     print "not found\n"
-    redirect '/admin/edit'
+    redirect '/admin/list'
   else
     article.update_attributes(
       title: params[:title],
@@ -255,7 +262,22 @@ post '/admin/edit' do
       update_member: params[:update_member],
       )
   end
-  redirect '/admin/edit'
+  redirect '/admin/list'
+end
+
+# 一覧
+get '/admin/list' do
+  @title = "一覧"
+  result = Article.all.order("id DESC")
+
+  if result.empty?
+    print "not found\n"
+  else
+
+  end
+  @articles = result
+
+  erb :list
 end
 
 # 削除
